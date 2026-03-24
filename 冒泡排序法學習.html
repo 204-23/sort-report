@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冒泡排序法 - 學習互動程式</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .section p, .section li {
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .section ul {
+            margin-left: 20px;
+        }
+        
+        .algorithm-box {
+            background: #ffe6e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        
+        .complexity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+        
+        .complexity-table th,
+        .complexity-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .complexity-table th {
+            background: #667eea;
+            color: white;
+        }
+        
+        .complexity-table tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+        
+        .visualization {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .array-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 3px;
+            height: 300px;
+            margin: 20px 0;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .array-bar {
+            background: #667eea;
+            border-radius: 3px 3px 0 0;
+            transition: all 0.3s ease;
+            min-width: 30px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .array-bar.comparing {
+            background: #ff6b6b;
+            animation: pulse 0.3s;
+        }
+        
+        .array-bar.sorted {
+            background: #51cf66;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #764ba2;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #6a3f8f;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .step-counter {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .steps-detail {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+        
+        .step-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: #f0f0f0;
+            border-left: 3px solid #667eea;
+            border-radius: 3px;
+        }
+        
+        .step-item.active {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .array-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔄 冒泡排序法</h1>
+            <p>Bubble Sort - 互動式學習平台</p>
+        </header>
+        
+        <div class="content">
+            <!-- 左側：原理和步驟 -->
+            <div>
+                <div class="section">
+                    <h2>📚 原理說明</h2>
+                    
+                    <h3>什麼是冒泡排序？</h3>
+                    <p>冒泡排序是一種簡單的排序算法，通過重複走訪要排序的序列，比較相鄰的兩個元素，如果它們的順序錯誤就交換過來，直到沒有更多的交換需要為止。</p>
+                    
+                    <h3>核心概念</h3>
+                    <ul>
+                        <li><strong>比較</strong>：比較相鄰的兩個元素</li>
+                        <li><strong>交換</strong>：如果順序不對，就交換位置</li>
+                        <li><strong>重複</strong>：逐輪進行，直到完全排序</li>
+                        <li><strong>名稱由來</strong>：最大的元素像氣泡一樣逐次「浮」到最後</li>
+                    </ul>
+                    
+                    <h3>演算法步驟</h3>
+                    <div class="algorithm-box">
+1. 從第一個元素開始<br/>
+2. 比較當前元素和下一個元素<br/>
+3. 如果當前元素 > 下一個元素，交換<br/>
+4. 移動到下一對元素，重複 2-3<br/>
+5. 完成一輪後，最大元素已在最後<br/>
+6. 重複輪數，直到整個序列排序完成
+                    </div>
+                    
+                    <h3>時間複雜度分析</h3>
+                    <table class="complexity-table">
+                        <tr>
+                            <th>情況</th>
+                            <th>時間複雜度</th>
+                            <th>說明</th>
+                        </tr>
+                        <tr>
+                            <td>最好情況</td>
+                            <td>O(n)</td>
+                            <td>數組已排序，只需遍歷一次</td>
+                        </tr>
+                        <tr>
+                            <td>平均情況</td>
+                            <td>O(n²)</td>
+                            <td>需要多輪比較和交換</td>
+                        </tr>
+                        <tr>
+                            <td>最壞情況</td>
+                            <td>O(n²)</td>
+                            <td>數組逆序排列，需最多比較</td>
+                        </tr>
+                        <tr>
+                            <td>空間複雜度</td>
+                            <td>O(1)</td>
+                            <td>只需要常數額外空間</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>優缺點</h3>
+                    <ul>
+                        <li><strong>✓ 優點</strong>：實現簡單、易理解、穩定排序</li>
+                        <li><strong>✗ 缺點</strong>：效率較低、不適合大數據</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 右側：互動演示 -->
+            <div>
+                <div class="section">
+                    <h2>🎮 互動演示</h2>
+                    
+                    <div class="visualization">
+                        <div class="controls">
+                            <button class="btn-primary" onclick="generateRandomArray()">🔀 生成隨機數組</button>
+                            <button class="btn-primary" onclick="startSort()">▶️ 開始排序</button>
+                            <button class="btn-primary" onclick="nextStep()" id="nextBtn">⏭️ 下一步</button>
+                            <button class="btn-secondary" onclick="resetSort()">🔄 重置</button>
+                        </div>
+                        
+                        <div class="step-counter">
+                            <span>步驟: <span id="stepCount">0</span> | 比較: <span id="compareCount">0</span> | 交換: <span id="swapCount">0</span></span>
+                        </div>
+                        
+                        <div class="array-container" id="arrayContainer">
+                            <!-- 動態生成的數組柱子 -->
+                        </div>
+                        
+                        <div class="info-box">
+                            <div id="stepInfo">點擊「生成隨機數組」開始</div>
+                        </div>
+                        
+                        <h3>執行步驟詳情</h3>
+                        <div class="steps-detail" id="stepsList">
+                            <p style="text-align: center; color: #999;">步驟記錄將顯示在這裡...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let array = [];
+        let steps = [];
+        let currentStep = 0;
+        let isSorting = false;
+        let compareCount = 0;
+        let swapCount = 0;
+        
+        // 初始化
+        function init() {
+            generateRandomArray();
+        }
+        
+        // 生成隨機數組
+        function generateRandomArray() {
+            array = [];
+            for (let i = 0; i < 10; i++) {
+                array.push(Math.floor(Math.random() * 90) + 10);
+            }
+            resetSort();
+            renderArray();
+        }
+        
+        // 渲染數組
+        function renderArray(highlightIndices = []) {
+            const container = document.getElementById('arrayContainer');
+            container.innerHTML = '';
+            const maxValue = Math.max(...array);
+            
+            array.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'array-bar';
+                bar.style.height = (value / maxValue * 100) + '%';
+                bar.textContent = value;
+                
+                if (highlightIndices.includes(index)) {
+                    bar.classList.add('comparing');
+                }
+                
+                // 檢查已排序的元素
+                if (currentStep > 0 && index >= array.length - Math.ceil(currentStep / (array.length - 1))) {
+                    bar.classList.add('sorted');
+                }
+                
+                container.appendChild(bar);
+            });
+        }
+        
+        // 開始排序
+        function startSort() {
+            if (array.length === 0) {
+                alert('請先生成數組');
+                return;
+            }
+            
+            isSorting = true;
+            steps = [];
+            currentStep = 0;
+            compareCount = 0;
+            swapCount = 0;
+            
+            // 執行冒泡排序算法
+            const tempArray = [...array];
+            for (let i = 0; i < tempArray.length; i++) {
+                for (let j = 0; j < tempArray.length - i - 1; j++) {
+                    compareCount++;
+                    steps.push({
+                        type: 'compare',
+                        indices: [j, j + 1],
+                        array: [...tempArray]
+                    });
+                    
+                    if (tempArray[j] > tempArray[j + 1]) {
+                        const temp = tempArray[j];
+                        tempArray[j] = tempArray[j + 1];
+                        tempArray[j + 1] = temp;
+                        swapCount++;
+                        
+                        steps.push({
+                            type: 'swap',
+                            indices: [j, j + 1],
+                            array: [...tempArray]
+                        });
+                    }
+                }
+                
+                steps.push({
+                    type: 'roundEnd',
+                    indices: [],
+                    array: [...tempArray],
+                    round: i + 1
+                });
+            }
+            
+            steps.push({
+                type: 'sorted',
+                indices: [],
+                array: [...tempArray]
+            });
+            
+            updateUI();
+        }
+        
+        // 下一步
+        function nextStep() {
+            if (currentStep < steps.length) {
+                const step = steps[currentStep];
+                array = [...step.array];
+                
+                let message = '';
+                if (step.type === 'compare') {
+                    message = `比較 ${array[step.indices[0]]} 和 ${array[step.indices[1]]}`;
+                } else if (step.type === 'swap') {
+                    message = `交換 ${steps[currentStep - 1].array[step.indices[0]]} 和 ${steps[currentStep - 1].array[step.indices[1]]}`;
+                } else if (step.type === 'roundEnd') {
+                    message = `第 ${step.round} 輪完成 - 最大元素已在正確位置`;
+                } else if (step.type === 'sorted') {
+                    message = `✅ 排序完成！總比較次數: ${compareCount}，總交換次數: ${swapCount}`;
+                }
+                
+                document.getElementById('stepInfo').textContent = message;
+                addStepToList(message, currentStep);
+                
+                currentStep++;
+                updateUI();
+            }
+        }
+        
+        // 重置
+        function resetSort() {
+            currentStep = 0;
+            isSorting = false;
+            steps = [];
+            compareCount = 0;
+            swapCount = 0;
+            document.getElementById('stepInfo').textContent = '準備就緒，點擊「開始排序」開始演示';
+            document.getElementById('stepsList').innerHTML = '<p style="text-align: center; color: #999;">步驟記錄將顯示在這裡...</p>';
+            updateUI();
+            renderArray();
+        }
+        
+        // 更新UI
+        function updateUI() {
+            document.getElementById('stepCount').textContent = currentStep;
+            document.getElementById('compareCount').textContent = compareCount;
+            document.getElementById('swapCount').textContent = swapCount;
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentStep >= steps.length) {
+                nextBtn.disabled = true;
+            } else {
+                nextBtn.disabled = false;
+            }
+            
+            if (steps.length > 0 && currentStep < steps.length) {
+                const step = steps[currentStep];
+                renderArray(step.type !== 'sorted' ? step.indices : []);
+            } else {
+                renderArray([]);
+            }
+        }
+        
+        // 添加步驟到列表
+        function addStepToList(message, stepNum) {
+            const list = document.getElementById('stepsList');
+            if (stepNum === 0) {
+                list.innerHTML = '';
+            }
+            
+            const stepItem = document.createElement('div');
+            stepItem.className = 'step-item active';
+            stepItem.textContent = `步驟 ${stepNum + 1}: ${message}`;
+            list.appendChild(stepItem);
+            list.scrollTop = list.scrollHeight;
+        }
+        
+        // 頁面加載時初始化
+        window.onload = init;
+    </script>
+</body>
+</html>
