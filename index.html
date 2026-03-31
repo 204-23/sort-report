@@ -5,21 +5,121 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>排序演算法學習</title>
   <style>
-    body{font-family:Segoe UI,Roboto,Arial;padding:20px;max-width:720px}
-    ul{list-style-type:none;padding:0}
-    li{margin:10px 0}
-    a{display:inline-block;padding:10px 15px;background:#f6f8fa;border-radius:6px;text-decoration:none;color:#333}
-    a:hover{background:#e1e4e8}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffe5ec 0%, #fff4f7 100%);
+      color: #553f48;
+      padding: 30px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .section {
+      background: #fff8fb;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 4px solid #ffd6df;
+      margin-bottom: 20px;
+    }
+
+    .section h3 {
+      color: #ffb8c4;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
+
+    .section p {
+      line-height: 1.8;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 15px 0;
+    }
+
+    a {
+      display: inline-block;
+      padding: 15px 20px;
+      background: linear-gradient(135deg, #ffe6ec 0%, #fff4f7 100%);
+      color: #553f48;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(255, 150, 165, 0.3);
+    }
+
+    a:hover {
+      background: linear-gradient(135deg, #fff0f4 0%, #fff8fb 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 150, 165, 0.4);
+    }
   </style>
 </head>
 <body>
-  <h1>排序演算法學習資源</h1>
-  <p>以下是各種排序演算法的互動式學習頁面：</p>
-  <ul>
-    <li><a href="冒泡排序法學習.html">冒泡排序 (Bubble Sort)</a></li>
-    <li><a href="selection_sort.html">選擇排序 (Selection Sort)</a></li>
-    <li><a href="insertion_sort.html">插入排序 (Insertion Sort)</a></li>
-  </ul>
-  <p>每個頁面都包含演算法的說明、互動式範例和步驟演示。</p>
+  <div class="container">
+    <header>
+      <h1>排序演算法學習資源</h1>
+      <p>互動式學習各種排序演算法</p>
+    </header>
+
+    <div class="content">
+      <div class="section">
+        <h3>可用的排序演算法</h3>
+        <p>以下是各種排序演算法的互動式學習頁面：</p>
+        <ul>
+          <li><a href="冒泡排序法學習.html">冒泡排序 (Bubble Sort)</a></li>
+          <li><a href="selection_sort.html">選擇排序 (Selection Sort)</a></li>
+          <li><a href="insertion_sort.html">插入排序 (Insertion Sort)</a></li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>學習特色</h3>
+        <p>每個頁面都包含演算法的說明、互動式範例和詳細的步驟演示。讓您能夠直觀地理解排序演算法的運作原理。</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
