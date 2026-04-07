@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>重力排序範例</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
+      background: linear-gradient(135deg, #fff5f7 0%, #ffffff 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 50px rgba(255, 154, 158, 0.3);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container::before {
+      content: "💫";
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2em;
+      opacity: 0.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffe5ec 0%, #fff4f7 100%);
+      color: #553f48;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    header::before {
+      content: "🪬";
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      font-size: 1.5em;
+    }
+
+    header h1 {
+      font-size: 3em;
+      margin-bottom: 15px;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      font-size: 1.2em;
+      opacity: 0.8;
+      font-weight: 300;
+    }
+
+    .content {
+      padding: 40px 30px;
+    }
+
+    .section {
+      background: linear-gradient(135deg, #fff8fb 0%, #fff4f7 100%);
+      padding: 30px;
+      border-radius: 15px;
+      border-left: 4px solid #ffd6df;
+      margin-bottom: 30px;
+      position: relative;
+      box-shadow: 0 5px 20px rgba(255, 214, 223, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+    }
+
+    .section::before {
+      content: "💡";
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 1.5em;
+      opacity: 0.7;
+    }
+
+    .section h3 {
+      color: #ffb8c4;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      font-weight: 400;
+    }
+
+    .section p {
+      line-height: 1.8;
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+    }
+
+    input[type=text] {
+      width: 60%;
+      padding: 12px;
+      border: 2px solid #ffd6df;
+      border-radius: 8px;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+    }
+
+    input[type=text]:focus {
+      outline: none;
+      border-color: #ffb8c4;
+      box-shadow: 0 0 10px rgba(255, 184, 196, 0.3);
+    }
+
+    button {
+      padding: 15px 25px;
+      margin-left: 15px;
+      background: linear-gradient(135deg, #ffe6ec 0%, #fff4f7 100%);
+      color: #553f48;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 150, 165, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: "⚡";
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1em;
+      opacity: 0.8;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #fff0f4 0%, #fff8fb 100%);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(255, 150, 165, 0.4);
+    }
+
+    button:hover::before {
+      animation: bounce 0.6s ease;
+    }
+
+    .info-box {
+      background: #fff8fb;
+      border-left: 4px solid #ffb3be;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+      color: #553f48;
+    }
+
+    .gravity-visual {
+      display: flex;
+      gap: 15px;
+      margin: 20px 0;
+      align-items: flex-end;
+      justify-content: center;
+      min-height: 350px;
+      background: linear-gradient(to bottom, #fff8fb 0%, #fff0f4 100%);
+      padding: 20px;
+      border-radius: 12px;
+      border: 2px solid #ffd6df;
+    }
+
+    .rod {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 3px;
+      align-items: center;
+      min-width: 45px;
+    }
+
+    .bead {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #ff9db8 0%, #ffb3c4 100%);
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(255, 157, 184, 0.4);
+      animation: fall 0.5s ease-in-out forwards;
+    }
+
+    @keyframes fall {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .rod-label {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #ffb8c4;
+      font-size: 1.2em;
+    }
+
+    pre {
+      background: #fff8fb;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      border-left: 4px solid #ffd6df;
+      color: #666;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(-50%) translateX(0); }
+      40% { transform: translateY(-50%) translateX(-5px); }
+      60% { transform: translateY(-50%) translateX(5px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🪬 重力排序 (Gravity Sort)</h1>
+      <p>💫 想像珠子在重力作用下掉落！輸入由逗號或空白分隔的整數，按排序按鈕開始學習！</p>
+    </header>
+
+    <div class="content">
+      <div class="section">
+        <h3>📝 輸入資料</h3>
+        <p>✨ 請輸入要排序的數字（建議用 1-9 之間的數字效果最佳）：</p>
+        <div>
+          <input id="arrInput" type="text" value="5,2,8,3,7">
+          <button id="sortBtn">開始排序</button>
+          <button id="sampleBtn">載入範例</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>📚 演算法說明</h3>
+        <p>🎓 重力排序是一種非常有趣的排序算法，它通過模擬物理世界的重力現象來實現排序。每個數字代表一串珠子的數量，珠子在重力作用下掉落到底部，排序就完成了！</p>
+        <div class="info-box">
+          <strong>核心概念：</strong><br>
+          • 珠子表示：數值為 5 就代表有 5 顆珠子<br>
+          • 重力模擬：珠子從上方掉落到底部<br>
+          • 結果提取：底層從左到右的珠子數量就是排序後的結果<br>
+          • 時間複雜度：O(n + m)，其中 m 是最大值<br>
+          • 空間複雜度：O(n + m)
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>🎯 珠子視覺化</h3>
+        <p>💎 下面是珠子在重力作用下掉落的動畫效果：</p>
+        <div class="gravity-visual" id="gravityDisplay">
+          <p style="color: #999; margin: auto;">按「開始排序」查看珠子掉落效果</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>📊 排序結果</h3>
+        <p>🔢 原始陣列: <span id="before">[5,2,8,3,7]</span></p>
+        <p>✅ 排序後: <span id="after">[]</span></p>
+      </div>
+
+      <div class="section">
+        <h3>📋 執行步驟</h3>
+        <p>🎬 重力排序的詳細步驟將在下方顯示：</p>
+        <pre id="steps">（按「開始排序」查看步驟）</pre>
+      </div>
+
+      <div class="section">
+        <h3>⏱️ 複雜度分析</h3>
+        <div class="info-box">
+          <strong>時間複雜度：O(n + m)</strong><br>
+          • n：陣列的元素數量<br>
+          • m：陣列中最大元素的值<br>
+          <br>
+          <strong>空間複雜度：O(n + m)</strong><br>
+          需要額外空間來存儲所有珠子的位置<br>
+          <br>
+          <strong>優點：</strong><br>
+          • 簡單直觀，易於理解<br>
+          • 對於值範圍小的陣列效率高<br>
+          <br>
+          <strong>缺點：</strong><br>
+          • 值範圍大時效率低<br>
+          • 需要額外的空間
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let array = [];
+    let steps = [];
+
+    function init() {
+      generateRandomArray();
+    }
+
+    function generateRandomArray() {
+      array = [];
+      for (let i = 0; i < 5; i++) {
+        array.push(Math.floor(Math.random() * 9) + 1);
+      }
+      resetSort();
+      document.getElementById('before').textContent = '[' + array.join(', ') + ']';
+    }
+
+
+
+    function displayGravityVisualization(arr, step = 0) {
+      const display = document.getElementById('gravityDisplay');
+      display.innerHTML = '';
+
+      const maxVal = Math.max(...arr);
+      const numRods = arr.length;
+
+      // 為每根杆子創建視覺元素
+      for (let i = 0; i < numRods; i++) {
+        const rod = document.createElement('div');
+        rod.className = 'rod';
+
+        // 添加珠子 - 只顯示到當前步驟
+        const beadsToShow = step === 0 ? arr[i] : Math.min(arr[i], step);
+        for (let j = 0; j < beadsToShow; j++) {
+          const bead = document.createElement('div');
+          bead.className = 'bead';
+          bead.style.animationDelay = `${j * 0.1}s`;
+          rod.appendChild(bead);
+        }
+
+        // 添加杆子標籤
+        const label = document.createElement('div');
+        label.className = 'rod-label';
+        label.textContent = arr[i];
+        rod.appendChild(label);
+
+        display.appendChild(rod);
+      }
+    }
+
+    function animateGravitySort(arr) {
+      const maxVal = Math.max(...arr);
+      let currentStep = 0;
+      const beadsPerRod = new Array(arr.length).fill(0);
+      
+      steps = [];
+      steps.push(`開始重力排序，陣列: [${arr.join(', ')}]`);
+      steps.push(`最大值: ${maxVal}，創建 ${arr.length} 根杆子`);
+      steps.push(`\n--- 珠子分布 ---`);
+      
+      // 為每根杆子放置珠子
+      for (let i = 0; i < arr.length; i++) {
+        steps.push(`杆子 ${i + 1}: 放置 ${arr[i]} 顆珠子`);
+      }
+
+      function animateStep() {
+        if (currentStep < maxVal) {
+          currentStep++;
+          
+          // 更新珠子顯示
+          displayGravityVisualization(arr, currentStep);
+          
+          // 模擬珠子掉落
+          for (let i = 0; i < arr.length; i++) {
+            if (arr[i] >= currentStep) {
+              beadsPerRod[i]++;
+            }
+          }
+          
+          steps.push(`\n--- 第 ${currentStep} 層掉落 ---`);
+          steps.push(`珠子掉落到第 ${currentStep} 層...`);
+          steps.push(`當前每根杆子底部珠子數: [${beadsPerRod.join(', ')}]`);
+          
+          document.getElementById('steps').textContent = steps.join('\n');
+          
+          // 繼續下一層
+          setTimeout(animateStep, 800);
+        } else {
+          // 排序完成
+          const finalSorted = beadsPerRod.slice().sort((a, b) => a - b);
+          steps.push(`\n--- 結果提取 ---`);
+          steps.push(`從底層向上讀取每根杆子的珠子數量：`);
+          steps.push(`排序結果: [${finalSorted.join(', ')}]`);
+          steps.push(`\n✅ 排序完成！`);
+          
+          document.getElementById('after').textContent = '[' + finalSorted.join(', ') + ']';
+          document.getElementById('steps').textContent = steps.join('\n');
+          displayGravityVisualization(finalSorted, 0);
+        }
+      }
+      
+      // 開始動畫
+      animateStep();
+    }
+
+    document.getElementById('sortBtn').addEventListener('click', function() {
+      const input = document.getElementById('arrInput').value;
+      const tempArr = input.split(/[,\s]+/).filter(Boolean).map(x => Number(x)).filter(x => x > 0);
+      
+      if (tempArr.length === 0) {
+        alert('請輸入數字');
+        return;
+      }
+
+      document.getElementById('before').textContent = '[' + tempArr.join(', ') + ']';
+      document.getElementById('after').textContent = '[]';
+      document.getElementById('steps').textContent = '開始排序動畫...';
+      
+      // 開始逐步排序動畫
+      animateGravitySort(tempArr);
+    });
+
+    document.getElementById('sampleBtn').addEventListener('click', function() {
+      generateRandomArray();
+      document.getElementById('after').textContent = '[]';
+      document.getElementById('steps').textContent = '（按「開始排序」查看步驟）';
+      document.getElementById('gravityDisplay').innerHTML = '<p style="color: #999; margin: auto;">按「開始排序」查看珠子掉落效果</p>';
+    });
+
+    window.onload = init;
+  </script>
+</body>
+</html>

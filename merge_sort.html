@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>冒泡排序法 - 學習互動程式</title>
+    <title>合併排序法 - 學習互動程式</title>
     <style>
         * {
             margin: 0;
@@ -36,7 +36,7 @@
         }
 
         header::before {
-            content: "🫧";
+            content: "🔀";
             position: absolute;
             top: 20px;
             left: 30px;
@@ -321,8 +321,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>🫧 冒泡排序法</h1>
-            <p>🎮 Bubble Sort - 互動式學習平台，讓學習變得更有趣！</p>
+            <h1>🔀 合併排序法</h1>
+            <p>🎮 互動式學習平台，讓學習變得更有趣！</p>
         </header>
         
         <div class="content">
@@ -331,25 +331,24 @@
                 <div class="section">
                     <h2>📚 原理說明</h2>
                     
-                    <h3>什麼是冒泡排序？</h3>
-                    <p>冒泡排序是一種簡單的排序算法，通過重複走訪要排序的序列，比較相鄰的兩個元素，如果它們的順序錯誤就交換過來，直到沒有更多的交換需要為止。</p>
+                    <h3>什麼是合併排序？</h3>
+                    <p>合併排序是一種分而治之的排序算法，採用遞歸方式將陣列分成兩半，分別排序後再合併，具有穩定性和 O(n log n) 的時間複雜度。</p>
                     
                     <h3>核心概念</h3>
                     <ul>
-                        <li><strong>比較</strong>：比較相鄰的兩個元素</li>
-                        <li><strong>交換</strong>：如果順序不對，就交換位置</li>
-                        <li><strong>重複</strong>：逐輪進行，直到完全排序</li>
-                        <li><strong>名稱由來</strong>：最大的元素像氣泡一樣逐次「浮」到最後</li>
+                        <li><strong>分散</strong>：將陣列遞歸分成最小單位（單個元素）</li>
+                        <li><strong>排序</strong>：在合併過程中進行比較和排序</li>
+                        <li><strong>合併</strong>：將已排序的子陣列合併成更大的有序陣列</li>
+                        <li><strong>名稱由來</strong>：通過不斷合併有序子序列來完成排序</li>
                     </ul>
                     
                     <h3>演算法步驟</h3>
                     <div class="algorithm-box">
-1. 從第一個元素開始<br/>
-2. 比較當前元素和下一個元素<br/>
-3. 如果當前元素 > 下一個元素，交換<br/>
-4. 移動到下一對元素，重複 2-3<br/>
-5. 完成一輪後，最大元素已在最後<br/>
-6. 重複輪數，直到整個序列排序完成
+1. 將陣列分成兩半<br/>
+2. 遞歸對左半部分排序<br/>
+3. 遞歸對右半部分排序<br/>
+4. 合併兩個已排序的子陣列<br/>
+5. 重複直到整個陣列排序完成
                     </div>
                     
                     <h3>時間複雜度分析</h3>
@@ -361,30 +360,30 @@
                         </tr>
                         <tr>
                             <td>最好情況</td>
-                            <td>O(n)</td>
-                            <td>數組已排序，只需遍歷一次</td>
+                            <td>O(n log n)</td>
+                            <td>已排序的陣列</td>
                         </tr>
                         <tr>
                             <td>平均情況</td>
-                            <td>O(n²)</td>
-                            <td>需要多輪比較和交換</td>
+                            <td>O(n log n)</td>
+                            <td>隨機陣列</td>
                         </tr>
                         <tr>
                             <td>最壞情況</td>
-                            <td>O(n²)</td>
-                            <td>數組逆序排列，需最多比較</td>
+                            <td>O(n log n)</td>
+                            <td>完全逆序的陣列</td>
                         </tr>
                         <tr>
                             <td>空間複雜度</td>
-                            <td>O(1)</td>
-                            <td>只需要常數額外空間</td>
+                            <td>O(n)</td>
+                            <td>需要額外的臨時陣列用於合併</td>
                         </tr>
                     </table>
                     
                     <h3>優缺點</h3>
                     <ul>
-                        <li><strong>✓ 優點</strong>：實現簡單、易理解、穩定排序</li>
-                        <li><strong>✗ 缺點</strong>：效率較低、不適合大數據</li>
+                        <li><strong>✓ 優點</strong>：穩定排序、時間複雜度穩定、適合大數據</li>
+                        <li><strong>✗ 缺點</strong>：需要額外空間、不適合鏈表排序</li>
                     </ul>
                 </div>
             </div>
@@ -404,7 +403,7 @@
                         </div>
                         
                         <div class="step-counter">
-                            <span>步驟: <span id="stepCount">0</span> | 比較: <span id="compareCount">0</span> | 交換: <span id="swapCount">0</span></span>
+                            <span>步驟: <span id="stepCount">0</span> | 比較: <span id="compareCount">0</span> | 合併: <span id="mergeCount">0</span></span>
                         </div>
                         
                         <div class="array-container" id="arrayContainer">
@@ -433,7 +432,7 @@
         let isAutoSorting = false;
         let autoSortInterval = null;
         let compareCount = 0;
-        let swapCount = 0;
+        let mergeCount = 0;
         
         // 初始化
         function init() {
@@ -466,8 +465,8 @@
                     bar.classList.add('comparing');
                 }
                 
-                // 檢查已排序的元素
-                if (currentStep > 0 && index >= array.length - Math.ceil(currentStep / (array.length - 1))) {
+                // 對於合併排序，當前步驟後的元素視為已處理
+                if (currentStep > array.length * 2) {
                     bar.classList.add('sorted');
                 }
                 
@@ -492,45 +491,16 @@
             steps = [];
             currentStep = 0;
             compareCount = 0;
-            swapCount = 0;
+            mergeCount = 0;
             
-            // 執行冒泡排序算法
+            // 執行合併排序算法並記錄步驟
             const tempArray = [...array];
-            for (let i = 0; i < tempArray.length; i++) {
-                for (let j = 0; j < tempArray.length - i - 1; j++) {
-                    compareCount++;
-                    steps.push({
-                        type: 'compare',
-                        indices: [j, j + 1],
-                        array: [...tempArray]
-                    });
-                    
-                    if (tempArray[j] > tempArray[j + 1]) {
-                        const temp = tempArray[j];
-                        tempArray[j] = tempArray[j + 1];
-                        tempArray[j + 1] = temp;
-                        swapCount++;
-                        
-                        steps.push({
-                            type: 'swap',
-                            indices: [j, j + 1],
-                            array: [...tempArray]
-                        });
-                    }
-                }
-                
-                steps.push({
-                    type: 'roundEnd',
-                    indices: [],
-                    array: [...tempArray],
-                    round: i + 1
-                });
-            }
-            
+            mergeSortSteps(tempArray, 0, tempArray.length - 1);
             steps.push({
                 type: 'sorted',
                 indices: [],
-                array: [...tempArray]
+                array: [...tempArray],
+                message: `✅ 排序完成！總比較次數: ${compareCount}，總合併次數: ${mergeCount}`
             });
             
             updateUI();
@@ -542,7 +512,97 @@
                 } else {
                     stopAutoSort();
                 }
-            }, 800); // 每800毫秒執行一步
+            }, 1000); // 每1秒執行一步
+        }
+        
+        // 合併排序步驟記錄
+        function mergeSortSteps(arr, left, right) {
+            if (left >= right) return;
+            
+            const mid = Math.floor((left + right) / 2);
+            
+            // 分散步驟
+            steps.push({
+                type: 'split',
+                indices: [left, mid, right],
+                array: [...arr],
+                message: `分散：將 [${arr.slice(left, right + 1).join(', ')}] 分成兩部分`
+            });
+            
+            mergeSortSteps(arr, left, mid);
+            mergeSortSteps(arr, mid + 1, right);
+            
+            mergeSteps(arr, left, mid, right);
+        }
+        
+        // 合併步驟記錄
+        function mergeSteps(arr, left, mid, right) {
+            const leftArr = arr.slice(left, mid + 1);
+            const rightArr = arr.slice(mid + 1, right + 1);
+            let i = 0, j = 0, k = left;
+            
+            steps.push({
+                type: 'mergeStart',
+                indices: [left, right],
+                array: [...arr],
+                message: `開始合併：[${leftArr.join(', ')}] 和 [${rightArr.join(', ')}]`
+            });
+            
+            while (i < leftArr.length && j < rightArr.length) {
+                compareCount++;
+                steps.push({
+                    type: 'compare',
+                    indices: [left + i, mid + 1 + j],
+                    array: [...arr],
+                    message: `比較 ${leftArr[i]} 和 ${rightArr[j]}`
+                });
+                
+                if (leftArr[i] <= rightArr[j]) {
+                    arr[k++] = leftArr[i++];
+                    steps.push({
+                        type: 'merge',
+                        indices: [k - 1],
+                        array: [...arr],
+                        message: `選擇 ${arr[k - 1]} 放入位置 ${k - 1}`
+                    });
+                } else {
+                    arr[k++] = rightArr[j++];
+                    steps.push({
+                        type: 'merge',
+                        indices: [k - 1],
+                        array: [...arr],
+                        message: `選擇 ${arr[k - 1]} 放入位置 ${k - 1}`
+                    });
+                }
+            }
+            
+            while (i < leftArr.length) {
+                arr[k++] = leftArr[i++];
+                steps.push({
+                    type: 'merge',
+                    indices: [k - 1],
+                    array: [...arr],
+                    message: `剩餘元素 ${arr[k - 1]} 放入位置 ${k - 1}`
+                });
+            }
+            
+            while (j < rightArr.length) {
+                arr[k++] = rightArr[j++];
+                steps.push({
+                    type: 'merge',
+                    indices: [k - 1],
+                    array: [...arr],
+                    message: `剩餘元素 ${arr[k - 1]} 放入位置 ${k - 1}`
+                });
+            }
+            
+            mergeCount++;
+            steps.push({
+                type: 'mergeEnd',
+                indices: [left, right],
+                array: [...arr],
+                message: `合併完成：[${arr.slice(left, right + 1).join(', ')}]`
+            });
         }
         
         // 暫停排序
@@ -571,19 +631,8 @@
                 const step = steps[currentStep];
                 array = [...step.array];
                 
-                let message = '';
-                if (step.type === 'compare') {
-                    message = `比較 ${array[step.indices[0]]} 和 ${array[step.indices[1]]}`;
-                } else if (step.type === 'swap') {
-                    message = `交換 ${steps[currentStep - 1].array[step.indices[0]]} 和 ${steps[currentStep - 1].array[step.indices[1]]}`;
-                } else if (step.type === 'roundEnd') {
-                    message = `第 ${step.round} 輪完成 - 最大元素已在正確位置`;
-                } else if (step.type === 'sorted') {
-                    message = `✅ 排序完成！總比較次數: ${compareCount}，總交換次數: ${swapCount}`;
-                }
-                
-                document.getElementById('stepInfo').textContent = message;
-                addStepToList(message, currentStep);
+                document.getElementById('stepInfo').textContent = step.message;
+                addStepToList(step.message, currentStep);
                 
                 currentStep++;
                 updateUI();
@@ -604,7 +653,7 @@
             isSorting = false;
             steps = [];
             compareCount = 0;
-            swapCount = 0;
+            mergeCount = 0;
             document.getElementById('stepInfo').textContent = '準備就緒，點擊「開始排序」開始演示';
             document.getElementById('stepsList').innerHTML = '<p style="text-align: center; color: #999;">步驟記錄將顯示在這裡...</p>';
             updateUI();
@@ -615,7 +664,7 @@
         function updateUI() {
             document.getElementById('stepCount').textContent = currentStep;
             document.getElementById('compareCount').textContent = compareCount;
-            document.getElementById('swapCount').textContent = swapCount;
+            document.getElementById('mergeCount').textContent = mergeCount;
             
             const startBtn = document.getElementById('startBtn');
             const pauseBtn = document.getElementById('pauseBtn');
@@ -633,7 +682,11 @@
             
             if (steps.length > 0 && currentStep < steps.length) {
                 const step = steps[currentStep];
-                renderArray(step.type !== 'sorted' ? step.indices : []);
+                let highlightIndices = [];
+                if (step.type === 'compare' || step.type === 'merge') {
+                    highlightIndices = step.indices;
+                }
+                renderArray(highlightIndices);
             } else {
                 renderArray([]);
             }
